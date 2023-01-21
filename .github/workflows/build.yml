@@ -4,11 +4,7 @@ on: [push]
 
 jobs:
     build:
-        
-        runs-on: windows-latest
-        strategy:
-            matrix:
-                dotnet-version: [ '4.8.1' ]
+        runs-on: [windows-latest]
         
         steps:
           - uses: actions/checkout@v3
