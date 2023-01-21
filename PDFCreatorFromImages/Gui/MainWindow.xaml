@@ -19,12 +19,12 @@
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="30"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Width="27" Height="27" Name="Add" ToolTip="Add image" Click="OnAddImageButtonClick"></Button>
-            <Button Grid.Column="1" Width="27" Height="27" Name="Save" ToolTip="Save pdf" Click="OnSaveDocumentButtonClick"></Button>
-            <Button Grid.Column="2" Width="27" Height="27" Name="Clear" ToolTip="Clear list" Click="OnClearImagesListButtonClick"></Button>
+            <Button Grid.Column="0" Width="27" Height="27" Name="AddButton" ToolTip="Add pdf elements" Click="OnAddPdfElementButtonClick"/>
+            <Button Grid.Column="1" Width="27" Height="27" Name="SaveButton" ToolTip="Save pdf" Click="OnSaveDocumentButtonClick"/>
+            <Button Grid.Column="2" Width="27" Height="27" Name="ClearButton" ToolTip="Clear list" Click="OnClearPdfElementsListButtonClick"/>
             <Grid Grid.Column="3"/>
-            <CheckBox Grid.Column="4" Height="20" Name="OpenAfterSave" ToolTip="Open after save.">Open after save.</CheckBox>
-            <Button Grid.Column="5" Width="27" Height="27" Name="Git" ToolTip="Open git project" Click="OnOpenGitButtonClick"></Button>
+            <CheckBox Grid.Column="4" Height="20" Name="OpenAfterSaveCheckBox" ToolTip="Open after save.">Open after save.</CheckBox>
+            <Button Grid.Column="5" Width="27" Height="27" Name="GitButton" ToolTip="Open git project" Click="OnOpenGitButtonClick"/>
         </Grid>
         <ListView Grid.Row="1" Name="Pages" Drop="OnFileDrop" AllowDrop="True">
         </ListView>

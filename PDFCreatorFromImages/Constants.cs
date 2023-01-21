@@ -2,6 +2,6 @@
 {
     public sealed class Constants
     {
-        public const string VERSION = "1.0.2";
+        public const string VERSION = "1.0.3";
     }
 }

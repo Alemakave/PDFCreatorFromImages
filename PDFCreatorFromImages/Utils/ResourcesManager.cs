@@ -14,25 +14,25 @@ namespace PDFCreatorFromImages.Utils
 
             switch (key)
             {
-                case "add":
+                case "add_icon":
                     using (Stream stream = GetResource("PDFCreatorFromImages.Assets.Add"))
                     {
                         image = BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
                     }
                     break;
-                case "clear":
+                case "clear_icon":
                     using (Stream stream = GetResource("PDFCreatorFromImages.Assets.Clear"))
                     {
                         image = BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
                     }
                     break;
-                case "save":
+                case "save_icon":
                     using (Stream stream = GetResource("PDFCreatorFromImages.Assets.Save"))
                     {
                         image = BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
                     }
                     break;
-                case "git":
+                case "git_icon":
                     using (Stream stream = GetResource("PDFCreatorFromImages.Assets.Git"))
                     {
                         image = BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);

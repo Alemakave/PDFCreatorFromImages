@@ -20,7 +20,7 @@ namespace PDFCreatorFromImages.Gui
     /// </summary>
     public partial class MainWindow
     {
-        private List<PdfImagePage> _imagesCache = new List<PdfImagePage>();
+        private List<PdfImagePage> _pdfElementsCache = new List<PdfImagePage>();
         public static PdfDocument ResultDocument;
 
         public MainWindow()
@@ -28,68 +28,57 @@ namespace PDFCreatorFromImages.Gui
             InitializeComponent();
             Title = "PDFCreatorFromImages v" + Constants.VERSION;
 
-            Add.Content = new Image
+            AddButton.Content = new Image
             {
-                Source = ResourcesManager.GetImage("add")
+                Source = ResourcesManager.GetImage("add_icon")
             };
-            Save.Content = new Image
+            SaveButton.Content = new Image
             {
-                Source = ResourcesManager.GetImage("save")
+                Source = ResourcesManager.GetImage("save_icon")
             };
-            Clear.Content = new Image
+            ClearButton.Content = new Image
             {
-                Source = ResourcesManager.GetImage("clear")
+                Source = ResourcesManager.GetImage("clear_icon")
             };
-            Git.Content = new Image
+            GitButton.Content = new Image
             {
-                Source = ResourcesManager.GetImage("git")
+                Source = ResourcesManager.GetImage("git_icon")
             };
         }
 
-        private void OnAddImageButtonClick(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Multiselect = true;
-            openFileDialog.ShowDialog();
-            foreach (string filePath in openFileDialog.FileNames)
-            {
-                AddImage(filePath);
-            }
-        }
-
-        private void OnClearImagesListButtonClick(object sender, RoutedEventArgs e)
-        {
-            Pages.Items.Clear();
-            ClearImageCache();
-        }
-
-        private void OnSaveDocumentButtonClick(object sender, RoutedEventArgs e)
-        {
-            SaveDocument();
-        }
-
-        public void AddImage(string filePath)
+        public void AddPdfElementToList(string filePath)
         {
             ListViewItem newImage = new ListViewItem();
             newImage.Content = filePath;
             if (!filePath.EndsWith(".pdf") && !filePath.EndsWith(".png") && !filePath.EndsWith(".jpg") && !filePath.EndsWith(".jpeg"))
             {
-                newImage.Background = new SolidColorBrush(Color.FromRgb(255, 95, 95));
+                newImage.Background = new SolidColorBrush(Color.FromRgb(255, 125, 125));
             }
+
+            MenuItem deleteButtonFromContextMenu = new MenuItem();
+            deleteButtonFromContextMenu.Header = "Delete";
+            deleteButtonFromContextMenu.Click += OnContextMenuDeleteButtonClick;
+
+            newImage.ContextMenu = new ContextMenu();
+            newImage.ContextMenu.Items.Add(deleteButtonFromContextMenu);
+
             Pages.Items.Add(newImage);
         }
 
         /**
          * Clear and unload image cache
          */
-        public void ClearImageCache()
+        public void ClearPdfElementsCache()
         {
-            foreach (PdfImagePage image in _imagesCache)
+            foreach (PdfImagePage element in _pdfElementsCache)
             {
-                image.Dispose();
+                element.Dispose();
             }
         }
 
+        /**
+         * Create and save PDF from items
+         */
         public void SaveDocument()
         {
             ResultDocument = new PdfDocument();
@@ -110,8 +99,8 @@ namespace PDFCreatorFromImages.Gui
                 }
                 else
                 {
-                    _imagesCache.Add(new PdfImagePage(page.Content.ToString()));
-                    _imagesCache[_imagesCache.Count - 1].DrawPage(ResultDocument.AddPage());
+                    _pdfElementsCache.Add(new PdfImagePage(page.Content.ToString()));
+                    _pdfElementsCache[_pdfElementsCache.Count - 1].DrawPage(ResultDocument.AddPage());
                 }
             }
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -120,12 +109,15 @@ namespace PDFCreatorFromImages.Gui
 
             if (saveFileDialog.ShowDialog().GetValueOrDefault(false)) {
                 ResultDocument.Save(saveFileDialog.FileName);
-                if (OpenAfterSave.IsChecked.GetValueOrDefault(false))
+                if (OpenAfterSaveCheckBox.IsChecked.GetValueOrDefault(false))
                     Process.Start(saveFileDialog.FileName);
             }
-            ClearImageCache();
+            ClearPdfElementsCache();
         }
 
+        //**************
+        //*** Events ***
+        //**************
         private void OnFileDrop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -136,15 +128,52 @@ namespace PDFCreatorFromImages.Gui
                 {
                     foreach (string file in files)
                     {
-                        AddImage(file);
+                        AddPdfElementToList(file);
                     }
                 }
             }
         }
 
+        //**********************
+        //*** Buttons events ***
+        //**********************
+        private void OnAddPdfElementButtonClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
+            openFileDialog.ShowDialog();
+            foreach (string filePath in openFileDialog.FileNames)
+            {
+                AddPdfElementToList(filePath);
+            }
+        }
+
+        private void OnClearPdfElementsListButtonClick(object sender, RoutedEventArgs e)
+        {
+            Pages.Items.Clear();
+            ClearPdfElementsCache();
+        }
+
+        private void OnSaveDocumentButtonClick(object sender, RoutedEventArgs e)
+        {
+            SaveDocument();
+        }
+
         private void OnOpenGitButtonClick(object sender, RoutedEventArgs e)
         {
             Process.Start("https://github.com/Alemakave/PDFCreatorFromImages");
+        }
+
+        //********************************
+        //*** ContextMenu items events ***
+        //********************************
+        /**
+         * Delete item from list
+         */
+        private void OnContextMenuDeleteButtonClick(object sender, RoutedEventArgs e)
+        {
+            ClearPdfElementsCache();
+            Pages.Items.RemoveAt(Pages.SelectedIndex);
         }
     }
 }
