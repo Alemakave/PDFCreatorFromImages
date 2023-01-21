@@ -19,5 +19,5 @@ jobs:
             run: nuget restore PDFCreatorFromImages.sln
             
           - name: Build
-            run: msbuild PDFCreatorFromImages.sln
+            run: msbuild PDFCreatorFromImages.sln /p:Configuration=Release
             
